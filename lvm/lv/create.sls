@@ -6,7 +6,7 @@
 
 {%- if lvm.lv and "create" in lvm.lv and lvm.lv.create is mapping %}
   {% for lv, lvdata in lvm.lv.create.items() %}
-
+    {%- if lvdata is mapping %}
     {%- if lvdata and 'snapshot' in lvdata and lvdata['snapshot'] == True %}
       {# workaround https://github.com/saltstack/salt/issues/48808 #}
 
@@ -42,6 +42,7 @@ lvm_lv_create_{{ lv }}:
 
     {%- endif %}
     - unless: lvdisplay {{ lv }} 2>/dev/null || lvdisplay {{ lvdata['vgname'] }}/{{ lv }} 2>/dev/null
+    {%- endif %}
   {%- endfor %}
 {%- else %}
 
