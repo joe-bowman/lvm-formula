@@ -5,7 +5,7 @@
 
 {%- if lvm.vg and "create" in lvm.vg and lvm.vg.create is mapping %}
   {% for vg, vgdata in lvm.vg.create.items() %}
-
+  {%- if vgdata is mapping %}
 lvm_vg_create_{{ vg }}:
   lvm.vg_present:
     - name: {{ vg }}
@@ -17,7 +17,7 @@ lvm_vg_create_{{ vg }}:
       - pvdisplay {{ dev }} 2>/dev/null | grep -i 'vg name.*[a-zA-Z1-9].*' 2>/dev/null
       {%- endfor %}
     {{ getopts(vgdata, True) }}
-
+  {%- endif %}
   {%- endfor %}
 {%- else %}
 
